@@ -1,0 +1,31 @@
+{
+  "primary": {
+    "blue": "#2A5C8F",
+    "orange": "#E67E22"
+  },
+  "text": {
+    "primary": "#1E2A3A",
+    "secondary": "#6C757D",
+    "tertiary": "#ADB5BD"
+  },
+  "background": {
+    "primary": "#FFFFFF",
+    "secondary": "#F8F9FA"
+  },
+  "status": {
+    "packed": "#E9ECEF",
+    "with_carrier": "#2A5C8F",
+    "in_transit": "#E67E22",
+    "delivered": "#28A745",
+    "unpacked": "#9B51E0"
+  },
+  "feedback": {
+    "success": "#28A745",
+    "warning": "#E67E22",
+    "error": "#DC3545"
+  },
+  "border": {
+    "light": "#E9ECEF",
+    "medium": "#DEE2E6"
+  }
+}
