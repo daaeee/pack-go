@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack&Go — Дашборд</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F5F7FA;
+            padding: 24px;
+        }
+
+        /* Основной контейнер */
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #F5F7FA;
+            display: flex;
+            gap: 24px;
+            min-height: 90vh;
+        }
+
+        /* ========== ЛЕВАЯ ПАНЕЛЬ (САЙДБАР) ========== */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-radius: 24px;
+            padding: 24px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2A5C8F;
+            margin-bottom: 32px;
+            padding-left: 12px;
+        }
+
+        /* Навигация */
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 32px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            color: #6C757D;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #F8F9FA;
+            color: #1E2A3A;
+        }
+
+        .nav-item.active {
+            background: #2A5C8F10;
+            color: #2A5C8F;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        /* Недавние комнаты в сайдбаре */
+        .recent-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ADB5BD;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 16px 0 12px 12px;
+        }
+
+        .recent-room {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-room:hover {
+            background: #F8F9FA;
+        }
+
+        .recent-room-name {
+            font-size: 14px;
+            color: #1E2A3A;
+        }
+
+        .recent-room-count {
+            font-size: 12px;
+            color: #6C757D;
+            background: #F8F9FA;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        /* ========== ОСНОВНАЯ ПАНЕЛЬ ========== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Верхняя панель с приветствием */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .welcome {
+            font-size: 18px;
+            font-weight: 500;
+            color: #1E2A3A;
+        }
+
+        .welcome-name {
+            color: #2A5C8F;
+            font-weight: 600;
+        }
+
+        .current-move {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #F8F9FA;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            color: #6C757D;
+        }
+
+        .current-move strong {
+            color: #1E2A3A;
+        }
+
+        .profile-icon {
+            width: 44px;
+            height: 44px;
+            background: #2A5C8F15;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* Карточка текущего переезда */
+        .move-card {
+            background: white;
+            border-radius: 20px;
+            padding: 16px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #E9ECEF;
+        }
+
+        .move-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ADB5BD;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .move-card-address {
+            font-size: 15px;
+            color: #1E2A3A;
+            font-weight: 500;
+        }
+
+        /* Статистика */
+        .stats-grid {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #E9ECEF;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1E2A3A;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6C757D;
+            margin-top: 6px;
+        }
+
+        /* Секция "Мои комнаты" */
+        .rooms-section {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E2A3A;
+        }
+
+        .section-link {
+            font-size: 13px;
+            color: #2A5C8F;
+            cursor: pointer;
+        }
+
+        /* Аккордеон комнаты */
+        .room-accordion {
+            border: 1px solid #E9ECEF;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .room-name {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .room-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .room-count {
+            font-size: 13px;
+            color: #6C757D;
+        }
+
+        .room-expand {
+            color: #ADB5BD;
+            font-size: 12px;
+        }
+
+        .room-content {
+            border-top: 1px solid #E9ECEF;
+            padding: 12px 20px;
+            background: #F8F9FA;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Карточка коробки внутри комнаты */
+        .box-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #E9ECEF;
+        }
+
+        .box-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .box-icon {
+            width: 40px;
+            height: 40px;
+            background: #F8F9FA;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .box-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .box-number {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .box-content {
+            font-size: 12px;
+            color: #6C757D;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge-packed {
+            background: #E9ECEF;
+            color: #1E2A3A;
+        }
+
+        .badge-carrier {
+            background: #2A5C8F;
+            color: white;
+        }
+
+        .badge-transit {
+            background: #E67E22;
+            color: white;
+        }
+
+        /* Секция "Недавние коробки" */
+        .recent-boxes-section {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .recent-boxes-grid {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .recent-box-card {
+            flex: 1;
+            min-width: 140px;
+            background: #F8F9FA;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #E9ECEF;
+            transition: all 0.2s;
+        }
+
+        .recent-box-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .recent-box-qr {
+            width: 60px;
+            height: 60px;
+            background: repeating-linear-gradient(45deg, #2A5C8F 0px, #2A5C8F 3px, #E9ECEF 3px, #E9ECEF 6px);
+            border-radius: 12px;
+            margin: 0 auto 12px;
+        }
+
+        .recent-box-number {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .recent-box-room {
+            font-size: 11px;
+            color: #6C757D;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- ЛЕВАЯ ПАНЕЛЬ (САЙДБАР) -->
+        <div class="sidebar">
+            <div class="logo">Pack&Go</div>
+
+            <div class="nav-menu">
+                <div class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    <span>Дашборд</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    <span>Мои коробки</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">🚚</span>
+                    <span>Логистика</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">📷</span>
+                    <span>Сканер</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">👤</span>
+                    <span>Профиль</span>
+                </div>
+            </div>
+
+            <div class="recent-title">Недавние комнаты</div>
+            <div class="recent-room">
+                <span class="recent-room-name">🏠 Кухня</span>
+                <span class="recent-room-count">4</span>
+            </div>
+            <div class="recent-room">
+                <span class="recent-room-name">🛏️ Спальня</span>
+                <span class="recent-room-count">3</span>
+            </div>
+            <div class="recent-room">
+                <span class="recent-room-name">🛋️ Гостиная</span>
+                <span class="recent-room-count">2</span>
+            </div>
+        </div>
+
+        <!-- ОСНОВНАЯ ПАНЕЛЬ -->
+        <div class="main-content">
+            <!-- Верхняя панель: приветствие + текущий переезд + профиль -->
+            <div class="top-bar">
+                <div class="welcome">
+                    Добро пожаловать, <span class="welcome-name">Анна</span> 👋
+                </div>
+                <div class="current-move">
+                    📍 <strong>Текущий переезд:</strong> Санкт-Петербург → Москва
+                </div>
+                <div class="profile-icon">👤</div>
+            </div>
+
+            <!-- Карточка текущего переезда (детально) -->
+            <div class="move-card">
+                <div class="move-card-title">ТЕКУЩИЙ ПЕРЕЕЗД</div>
+                <div class="move-card-address">
+                    📍 Санкт-Петербург, ул. Ленина, 10 → 📍 Москва, ул. Пушкина, 5
+                </div>
+            </div>
+
+            <!-- Статистика -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Всего коробок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Упаковано</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">В пути</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Доставлено</div>
+                </div>
+            </div>
+
+            <!-- Мои комнаты (аккордеоны) -->
+            <div class="rooms-section">
+                <div class="section-header">
+                    <div class="section-title">Мои комнаты</div>
+                    <div class="section-link">Все комнаты →</div>
+                </div>
+
+                <!-- Комната: Кухня (раскрыта) -->
+                <div class="room-accordion">
+                    <div class="room-header">
+                        <div class="room-name">🏠 Кухня</div>
+                        <div class="room-stats">
+                            <span class="room-count">4 коробки</span>
+                            <span class="room-expand">▼</span>
+                        </div>
+                    </div>
+                    <div class="room-content">
+                        <div class="box-row">
+                            <div class="box-info">
+                                <div class="box-icon">📦</div>
+                                <div class="box-details">
+                                    <div class="box-number">Коробка #1</div>
+                                    <div class="box-content">Кастрюли, тарелки, ножи, разделочная доска</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-packed">Упакована</span>
+                        </div>
+                        <div class="box-row">
+                            <div class="box-info">
+                                <div class="box-icon">📦</div>
+                                <div class="box-details">
+                                    <div class="box-number">Коробка #2</div>
+                                    <div class="box-content">Сковородки, крышки, венчик</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-carrier">У водителя</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Комната: Спальня (закрыта) -->
+                <div class="room-accordion">
+                    <div class="room-header">
+                        <div class="room-name">🛏️ Спальня</div>
+                        <div class="room-stats">
+                            <span class="room-count">3 коробки</span>
+                            <span class="room-expand">▶</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Комната: Гостиная (закрыта) -->
+                <div class="room-accordion">
+                    <div class="room-header">
+                        <div class="room-name">🛋️ Гостиная</div>
+                        <div class="room-stats">
+                            <span class="room-count">2 коробки</span>
+                            <span class="room-expand">▶</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Недавние коробки с QR -->
+            <div class="recent-boxes-section">
+                <div class="section-header">
+                    <div class="section-title">Недавние коробки</div>
+                    <div class="section-link">Все коробки →</div>
+                </div>
+                <div class="recent-boxes-grid">
+                    <div class="recent-box-card">
+                        <div class="recent-box-qr"></div>
+                        <div class="recent-box-number">Коробка #1</div>
+                        <div class="recent-box-room">Кухня</div>
+                    </div>
+                    <div class="recent-box-card">
+                        <div class="recent-box-qr"></div>
+                        <div class="recent-box-number">Коробка #2</div>
+                        <div class="recent-box-room">Кухня</div>
+                    </div>
+                    <div class="recent-box-card">
+                        <div class="recent-box-qr"></div>
+                        <div class="recent-box-number">Коробка #3</div>
+                        <div class="recent-box-room">Спальня</div>
+                    </div>
+                    <div class="recent-box-card">
+                        <div class="recent-box-qr"></div>
+                        <div class="recent-box-number">Коробка #4</div>
+                        <div class="recent-box-room">Гостиная</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack&Go — Мои коробки</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F5F7FA;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 24px;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 24px;
+            padding: 24px 16px;
+            height: fit-content;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2A5C8F;
+            margin-bottom: 32px;
+            padding-left: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            color: #6C757D;
+            cursor: pointer;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #F8F9FA;
+            color: #1E2A3A;
+        }
+
+        .nav-item.active {
+            background: #2A5C8F10;
+            color: #2A5C8F;
+            font-weight: 500;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+        }
+
+        /* Header с кнопкой */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E2A3A;
+        }
+
+        /* Кнопка "Новая коробка" */
+        .btn-new-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2A5C8F;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(42, 92, 143, 0.2);
+        }
+
+        .btn-new-box:hover {
+            background: #1E4A73;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(42, 92, 143, 0.3);
+        }
+
+        /* Search and Filters */
+        .search-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #E9ECEF;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .search-bar span {
+            font-size: 18px;
+            color: #ADB5BD;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+            font-family: inherit;
+        }
+
+        .search-bar input::placeholder {
+            color: #ADB5BD;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 8px 16px;
+            background: white;
+            border-radius: 30px;
+            font-size: 13px;
+            color: #6C757D;
+            cursor: pointer;
+            border: 1px solid #E9ECEF;
+            transition: all 0.2s;
+        }
+
+        .filter-chip:hover {
+            border-color: #2A5C8F;
+            color: #2A5C8F;
+        }
+
+        .filter-chip.active {
+            background: #2A5C8F;
+            color: white;
+            border-color: #2A5C8F;
+        }
+
+        /* Boxes Grid */
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        /* Карточка коробки */
+        .box-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            gap: 16px;
+            transition: all 0.2s;
+            border: 1px solid #E9ECEF;
+            cursor: pointer;
+        }
+
+        .box-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .box-icon {
+            width: 52px;
+            height: 52px;
+            background: #F8F9FA;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .box-info {
+            flex: 1;
+        }
+
+        .box-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #1E2A3A;
+        }
+
+        .box-room {
+            font-size: 12px;
+            color: #6C757D;
+            margin-bottom: 8px;
+        }
+
+        .box-content {
+            font-size: 13px;
+            color: #1E2A3A;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge-packed {
+            background: #E9ECEF;
+            color: #1E2A3A;
+        }
+
+        .badge-carrier {
+            background: #2A5C8F;
+            color: white;
+        }
+
+        .badge-transit {
+            background: #E67E22;
+            color: white;
+        }
+
+        .badge-delivered {
+            background: #28A745;
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
+            background: white;
+            border-radius: 24px;
+            border: 1px solid #E9ECEF;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E2A3A;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #6C757D;
+            margin-bottom: 24px;
+        }
+
+        .empty-btn {
+            background: #2A5C8F;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .btn-new-box {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Pack&Go</div>
+            <div class="nav-item">📊 Дашборд</div>
+            <div class="nav-item active">📦 Мои коробки</div>
+            <div class="nav-item">🚚 Логистика</div>
+            <div class="nav-item">📷 Сканер</div>
+            <div class="nav-item">👤 Профиль</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Мои коробки</h1>
+                <button class="btn-new-box">
+                    <span>+</span> Новая коробка
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" placeholder="Поиск по содержимому или номеру коробки...">
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-chip active">Все</div>
+                <div class="filter-chip">Кухня</div>
+                <div class="filter-chip">Спальня</div>
+                <div class="filter-chip">Гостиная</div>
+                <div class="filter-chip">В пути</div>
+                <div class="filter-chip">Доставлено</div>
+            </div>
+
+            <!-- Boxes Grid (с коробками) -->
+            <div class="boxes-grid">
+                <div class="box-card">
+                    <div class="box-icon">📦</div>
+                    <div class="box-info">
+                        <div class="box-title">Коробка #1</div>
+                        <div class="box-room">Кухня</div>
+                        <div class="box-content">Кастрюли, тарелки, ножи, разделочная доска</div>
+                        <span class="badge badge-packed">Упакована</span>
+                    </div>
+                </div>
+
+                <div class="box-card">
+                    <div class="box-icon">📦</div>
+                    <div class="box-info">
+                        <div class="box-title">Коробка #2</div>
+                        <div class="box-room">Кухня</div>
+                        <div class="box-content">Сковородки, крышки, венчик</div>
+                        <span class="badge badge-carrier">У водителя</span>
+                    </div>
+                </div>
+
+                <div class="box-card">
+                    <div class="box-icon">📦</div>
+                    <div class="box-info">
+                        <div class="box-title">Коробка #3</div>
+                        <div class="box-room">Спальня</div>
+                        <div class="box-content">Подушки, одеяла, постельное бельё</div>
+                        <span class="badge badge-transit">В пути</span>
+                    </div>
+                </div>
+
+                <div class="box-card">
+                    <div class="box-icon">📦</div>
+                    <div class="box-info">
+                        <div class="box-title">Коробка #4</div>
+                        <div class="box-room">Гостиная</div>
+                        <div class="box-content">Пледы, книги, журналы</div>
+                        <span class="badge badge-delivered">Доставлена</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State (скрыт, показать если нет коробок) -->
+            <!--
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <div class="empty-title">Нет коробок</div>
+                <div class="empty-text">Создайте первую коробку, чтобы начать упаковку</div>
+                <button class="empty-btn">+ Создать коробку</button>
+            </div>
+            -->
+        </div>
+    </div>
+</body>
+</html>

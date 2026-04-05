@@ -1,0 +1,39 @@
+{
+  "fontFamily": "Inter, system-ui, sans-serif",
+  "headings": {
+    "h1": {
+      "fontSize": "28px",
+      "fontWeight": 700,
+      "lineHeight": "36px"
+    },
+    "h2": {
+      "fontSize": "20px",
+      "fontWeight": 600,
+      "lineHeight": "28px"
+    },
+    "h3": {
+      "fontSize": "18px",
+      "fontWeight": 600,
+      "lineHeight": "24px"
+    }
+  },
+  "body": {
+    "large": {
+      "fontSize": "16px",
+      "lineHeight": "24px"
+    },
+    "regular": {
+      "fontSize": "14px",
+      "lineHeight": "20px"
+    },
+    "small": {
+      "fontSize": "12px",
+      "lineHeight": "16px"
+    }
+  },
+  "caption": {
+    "fontSize": "11px",
+    "lineHeight": "16px",
+    "textTransform": "uppercase"
+  }
+}
